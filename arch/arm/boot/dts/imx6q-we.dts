@@ -1,0 +1,79 @@
+/*
+ * Copyright 2013 Freescale Semiconductor, Inc.
+ *
+ * Author: Fabio Estevam <fabio.estevam@freescale.com>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
+ *
+ */
+/dts-v1/;
+#include "imx6q.dtsi"
+#include "imx6qdl-wandboard-revc1.dtsi"
+
+/ {
+	model = "WE i.MX6 Quad Board";
+	compatible = "wand,imx6q-wandboard", "fsl,imx6q";
+
+	memory {
+		reg = <0x10000000 0x80000000>;
+	};
+};
+
+&iomuxc {
+	pinctrl-0 = <&pinctrl_hog>;
+	
+	pcie {
+		pinctrl_pcie: pciegrp {
+			fsl,pins = <
+				/* Reset */
+				MX6QDL_PAD_EIM_D31__GPIO3_IO31  0x80000000
+			>;
+		};
+	};
+};
+
+&sata {
+	status = "okay";
+};
+
+&codec {
+	status = "disable";
+};
+
+&ssi1 {
+	status = "disabled";
+};
+
+&i2c2 {
+	clock-frequency = <100000>;
+	pinctrl-names = "default";
+	pinctrl-0 = <&pinctrl_i2c2>;
+	status = "okay";
+	
+	codec: sgtl5000@0a {
+		status = "disabled";
+	};
+
+	rtc: pcf8523@68 {
+		compatible = "nxp,pcf8523";
+		reg = <0x68>;
+	};
+	
+	sensor1: lm75@48 {
+		compatible = "lm75";
+		reg = <0x48>;
+	};
+};
+
+&pcie {
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&pinctrl_pcie>;
+	reset-gpio = <&gpio3 31 0>;
+};
+
+&snvs_rtc {
+	status = "disabled";
+};
